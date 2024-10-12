@@ -40,6 +40,7 @@ exprSet <- tnbc.tumor.count
 
 
 dat=log2(edgeR::cpm(exprSet)+1)
+
 library(estimate)
 estimate<-function(dat,pro){
   input.f=paste0(pro,'_estimate_input.txt')
@@ -49,10 +50,10 @@ estimate<-function(dat,pro){
   library(estimate)
   filterCommonGenes(input.f=input.f,
                     output.f=output.f,
-                    id="GeneSymbol")
+                    id="GeneSymbol")##注意这个id
   estimateScore(input.ds=output.f,
                 output.ds=output.ds,
-                platform="illumina")##注意platform，转录组数据illumina，芯片affy
+                platform="illumina")##注意platform，转录组数据illumina，芯片affymetrix
   scores=read.table(output.ds,skip=2,header=T)
   rownames(scores)=scores[,1]
   scores=t(scores[,3:ncol(scores)])
