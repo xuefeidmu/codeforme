@@ -5,12 +5,13 @@ options(stringsAsFactors = F)
 
 #加载R包
 library(GEOquery)
-#手工读取geo文件 这里下载的是soft文件
+#手工读取geo文件 filename这里下载的是soft文件
 gse <- getGEO(filename = "GSE76250_family.soft.gz",destdir = ".")
 str(gse)
 ## 查看用几个平台
 length(gse)
-#提取探针 基因及其位于染色体上的位置等信息
+## 提取探针 基因及其位于染色体上的位置等信息
+## 这里是手动提取
 id_probe <- gse@gpls$GPL17586@dataTable@table
 dim(id_probe)
 head(id_probe)
