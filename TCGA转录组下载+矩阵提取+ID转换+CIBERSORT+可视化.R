@@ -79,8 +79,8 @@ exp2=rownames_to_column(exp2)
 write.table(exp2,file="exp.txt",row.names=F,quote=F,sep="\t")
 
 ## 加载cibersort，分析
-source("CIBERSORT.R")
-TME.results=CIBERSORT("LM22.txt",
+source("CIBERSORT.R") ##数据在github
+TME.results=CIBERSORT("LM22.txt", ##数据在github
  "exp.txt",
  perm=1000,
  QN=T)
