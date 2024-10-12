@@ -100,7 +100,7 @@ rownames(gene_exp_matrix3) <- levels(geneidfactor3)
 ## 6. 多矩阵合并
 # Convert to data frames and merge datasets
 geo_exp_1 <- as.data.frame(gene_exp_matrix)
-geo_exp_2 <- as.data.frame(gene_exp_matrix2)  # Assuming similar process for gset2 and gset3
+geo_exp_2 <- as.data.frame(gene_exp_matrix2)
 geo_exp_3 <- as.data.frame(gene_exp_matrix3)
 
 # Find common samples across datasets
