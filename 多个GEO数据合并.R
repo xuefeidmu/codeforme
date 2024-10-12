@@ -1,9 +1,7 @@
 ## 多个GEO数据合并
 
 
-## 手动设置文件夹
-
-
+## 手动设置工作文件夹
 
 
 ## 1. 加载所需R包
@@ -128,11 +126,11 @@ group1 <- as.matrix(pdata[,"source_name_ch1"])
 
                           
 pdata2 <- pData(gset2[[1]])
-group2 <- as.matrix(pdata2[,"group"])
+group2 <- as.matrix(pdata2[,"group"]) ##修改"group"
 
                         
 pdata3 <- pData(gset3[[1]])
-group3 <- as.matrix(pdata3[,"group"])
+group3 <- as.matrix(pdata3[,"group"]) ##修改"group"
 
 # Combine group data
 talgroup <- as.data.frame(rbind(group1, group2, group3))
