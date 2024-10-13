@@ -61,6 +61,15 @@ probe_name3 <- rownames(exp3)
 
 
 ## 5. ID转换
+
+
+## 常用的转换ID的方法
+find_anno("GPL96")
+ids <- AnnoProbe::idmap('GPL96')
+rownames(exp3)=ids$symbol[match(rownames(exp3),ids$probe_id)]
+
+
+
 # For gset1
 loc1 <- match(GPL_data_11[,1], probe_name)
 probe_exp1 <- exp[loc1,]
