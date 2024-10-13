@@ -7,6 +7,14 @@ primary invasive breast cancer (41 TN, 30 HER2, 29 Luminal A and 30 Luminal B) a
 
 
 GSE25066
+basal 189
+luma 160
+lumb 78
+her2 37
+normal 44
+
+
+
 
 GSE21653
 T
@@ -16,3 +24,43 @@ Dfs
 分子分型
 
 GSE103091
+tnbc 生存数据107
+tnbc 无生存数据131
+
+
+
+
+GSE76275
+实验组：198个三阴性乳腺癌肿瘤样本
+对照组：67非三阴性乳腺癌肿瘤样本
+
+
+GSE38959
+三阴 30
+正常 13
+
+
+
+GSE31448
+her2 26
+luma 90
+lumb 49
+tnbc 98
+normal 31
+
+
+
+
+
+GSE65194
+tumor cell 14
+healthy sample 11
+her2 39
+luma 29
+lumb 30
+tnbc 55
+
+
+
+GSE76124
+198 TNBC
