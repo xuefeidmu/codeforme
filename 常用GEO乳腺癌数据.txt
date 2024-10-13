@@ -64,3 +64,30 @@ tnbc 55
 
 GSE76124
 198 TNBC
+
+
+GSE83937
+131 tumor
+
+
+GSE40525
+basal (8 samples)
+her2(6 samples)
+lumina(47 samples)
+normal(59 samples)都是癌旁样本
+
+
+
+GSE76250
+normal 33
+tnbc 165
+
+
+
+
+
+
+
+
+
+
