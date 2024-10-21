@@ -30,8 +30,7 @@ if (!gsg$allOK) {
 
 # 样本聚类以检测异常
 sampleTree <- hclust(dist(datExpr), method = "average")
-plot(sampleTree, main = "Sample clustering to detect outliers", sub = "", xlab = "")#显示样本名
-plot(sampleTree, main = "Sample clustering to detect outliers", sub = "", xlab = "", labels = FALSE)#不显示样本名
+plot(sampleTree, main = "Sample clustering to detect outliers", sub = "", xlab = "", labels = FALSE)
 
 # 排除异常样本（通过树状图手动选择要排除的样本）
 # 假设我们手动选择了一些异常样本并将它们排除
@@ -43,7 +42,16 @@ datExpr <- datExpr[keepSamples, ]
 powers <- c(c(1:10), seq(from = 12, to = 20, by = 2))
 sft <- pickSoftThreshold(datExpr, powerVector = powers, verbose = 5)
 
+# 自动选择合适的软阈值
+softPower <- sft$powerEstimate
+
+# 检查softPower是否为NA并重新计算
+if (is.na(softPower)) {
+  softPower <- 6  # 如果未找到合适的软阈值，使用默认值6
+}
+
 # 可视化软阈值选择
+if (!is.na(softPower)) {
 plot(sft$fitIndices[, 1], -sign(sft$fitIndices[, 3]) * sft$fitIndices[, 2],
      xlab = "Soft Threshold (power)",
      ylab = "Scale Free Topology Model Fit, signed R^2",
@@ -51,8 +59,12 @@ plot(sft$fitIndices[, 1], -sign(sft$fitIndices[, 3]) * sft$fitIndices[, 2],
 text(sft$fitIndices[, 1], -sign(sft$fitIndices[, 3]) * sft$fitIndices[, 2],
      labels = powers, cex = 0.9, col = "red")
 
+# 在最佳软阈值处画一条横线
+  abline(v = softPower, col = "blue", lty = 2)
+}
+
 # 选择合适的软阈值
-softPower <- 6  # 假设选择了6作为软阈值
+softPower <- sft$powerEstimate  # 自动选择的软阈值
 adjacency <- adjacency(datExpr, power = softPower)
 
 # 将邻接矩阵转换为拓扑重叠矩阵 (TOM)，并计算相似度
