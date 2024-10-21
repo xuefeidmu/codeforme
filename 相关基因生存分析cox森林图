@@ -1,0 +1,84 @@
+# 加载必要的包
+library(survival)
+library(forestplot)
+
+# 读取生存信息和基因表达矩阵
+survival_data <- read.csv("survival_data.csv", row.names = 1)  
+# 生存数据数据要求，行为样本名，列名为status和time
+# status中只能有0（存活）和1（死亡）
+# time中不能有缺失
+
+
+
+gene_expression <- read.csv("gene_expression.csv", row.names = 1)  
+# 数据要求，基因表达矩阵，行为基因symbol，不能有缺失值
+
+
+
+
+
+# 确保样本名在两组数据中是一致的
+common_samples <- intersect(rownames(survival_data), colnames(gene_expression))
+
+# 提取共同的样本
+survival_data <- survival_data[common_samples, ]
+gene_expression <- gene_expression[, common_samples]
+
+# 移除生存时间或状态为NA的样本
+survival_data <- na.omit(survival_data)
+gene_expression <- gene_expression[, rownames(survival_data)]  # 重新匹配基因表达数据
+
+
+##步骤 2：Cox回归模型计算HR步骤 2：Cox回归模型计算HR
+# 创建一个存储结果的空列表
+results <- list()
+
+# 遍历每个基因进行Cox回归分析
+for (gene in rownames(gene_expression)) {
+  # 获取每个基因的表达水平
+  gene_expression_values <- as.numeric(gene_expression[gene, ])
+
+  # 进行Cox回归分析
+  cox_model <- coxph(Surv(survival_data$time, survival_data$status) ~ gene_expression_values)
+  summary_model <- summary(cox_model)
+  
+  # 提取HR和95%置信区间
+  hr <- summary_model$coefficients[1, "exp(coef)"]
+  lower_ci <- summary_model$conf.int[,"lower .95"]
+  upper_ci <- summary_model$conf.int[,"upper .95"]
+  
+  # 保存结果
+  results[[gene]] <- c(hr, lower_ci, upper_ci)
+}
+
+# 将结果转换为数据框
+results_df <- do.call(rbind, results)
+colnames(results_df) <- c("HR", "Lower 95% CI", "Upper 95% CI")
+
+
+##步骤 3：绘制森林图
+# 准备绘图的数据
+forest_data <- data.frame(
+  gene = rownames(results_df),
+  HR = results_df[, "HR"],
+  lower = results_df[, "Lower 95% CI"],
+  upper = results_df[, "Upper 95% CI"]
+)
+
+# 创建森林图
+forestplot(
+  labeltext = list(forest_data$gene),
+  mean = forest_data$HR,
+  lower = forest_data$lower,
+  upper = forest_data$upper,
+  xlab = "Hazard Ratio",
+  title = "Forest plot of Hazard Ratios for Genes"
+)
+
+
+
+
+
+
+
+
