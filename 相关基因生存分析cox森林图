@@ -11,10 +11,7 @@ survival_data <- read.csv("survival_data.csv", row.names = 1)
 
 
 gene_expression <- read.csv("gene_expression.csv", row.names = 1)  
-# 数据要求，基因表达矩阵，行为基因symbol，不能有缺失值
-
-
-
+# 数据要求，基因表达矩阵，行为基因symbol，不能有缺失值，基因还要是tpm才可比
 
 
 # 确保样本名在两组数据中是一致的
