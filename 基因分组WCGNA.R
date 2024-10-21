@@ -11,7 +11,7 @@ data <- log2(data + 1)
 # 根据某个基因按中位值分组
 # 假设你要用基因geneA来将样本分成高表达组和低表达组
 gene_name <- "geneA"
-median_value <- median(data[gene_name, ])
+median_value <- median(as.numeric(data[gene_name, ]))
 group <- ifelse(data[gene_name, ] > median_value, "High", "Low")
 
 # 将数据按分组进行分开
@@ -30,7 +30,8 @@ if (!gsg$allOK) {
 
 # 样本聚类以检测异常
 sampleTree <- hclust(dist(datExpr), method = "average")
-plot(sampleTree, main = "Sample clustering to detect outliers", sub = "", xlab = "")
+plot(sampleTree, main = "Sample clustering to detect outliers", sub = "", xlab = "")#显示样本名
+plot(sampleTree, main = "Sample clustering to detect outliers", sub = "", xlab = "", labels = FALSE)#不显示样本名
 
 # 排除异常样本（通过树状图手动选择要排除的样本）
 # 假设我们手动选择了一些异常样本并将它们排除
