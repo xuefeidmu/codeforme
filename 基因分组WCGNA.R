@@ -2,8 +2,11 @@
 library(WGCNA)
 options(stringsAsFactors = FALSE)
 
-# 读取你的表达矩阵数据
+# 读取你的表达矩阵数据（注意：表达矩阵数据要求为TPM值，并在WGCNA分析之前进行log2(TPM+1)处理）
 data <- read.csv("你的表达矩阵文件.csv", row.names = 1)
+
+# 对TPM表达矩阵进行log2(TPM+1)处理
+data <- log2(data + 1)
 
 # 根据某个基因按中位值分组
 # 假设你要用基因geneA来将样本分成高表达组和低表达组
@@ -21,12 +24,19 @@ datExpr <- t(data)
 # 检查数据是否适合进行WGCNA分析
 gsg <- goodSamplesGenes(datExpr, verbose = 3)
 if (!gsg$allOK) {
+  # 排除有问题的样本和基因
   datExpr <- datExpr[gsg$goodSamples, gsg$goodGenes]
 }
 
 # 样本聚类以检测异常
 sampleTree <- hclust(dist(datExpr), method = "average")
 plot(sampleTree, main = "Sample clustering to detect outliers", sub = "", xlab = "")
+
+# 排除异常样本（通过树状图手动选择要排除的样本）
+# 假设我们手动选择了一些异常样本并将它们排除
+clust <- cutreeStatic(sampleTree, cutHeight = 150, minSize = 10)
+keepSamples <- (clust == 1)
+datExpr <- datExpr[keepSamples, ]
 
 # 选择软阈值
 powers <- c(c(1:10), seq(from = 12, to = 20, by = 2))
