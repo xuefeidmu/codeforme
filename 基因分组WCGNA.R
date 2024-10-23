@@ -1,3 +1,4 @@
+##根据一个基因高低表达分组后，对两组进行WCGNA分析
 # 加载必要的库并导入数据
 library(WGCNA)
 options(stringsAsFactors = FALSE)
