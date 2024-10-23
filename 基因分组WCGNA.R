@@ -1,4 +1,3 @@
-##根据一个基因高低表达分组后，对两组进行WCGNA分析
 # 加载必要的库并导入数据
 library(WGCNA)
 options(stringsAsFactors = FALSE)
@@ -43,6 +42,28 @@ datExpr <- datExpr[keepSamples, ]
 powers <- c(c(1:10), seq(from = 12, to = 20, by = 2))
 sft <- pickSoftThreshold(datExpr, powerVector = powers, verbose = 5)
 
+# 可视化无尺度网络拟合度和平均连通性
+par(mfrow = c(1, 2))
+
+# 绘制无尺度网络拟合度 (R²)
+plot(sft$fitIndices[, 1], -sign(sft$fitIndices[, 3]) * sft$fitIndices[, 2],
+     xlab = "Soft Threshold (power)", 
+     ylab = "Scale Free Topology Model Fit, signed R^2", 
+     type = "n", 
+     main = paste("Scale independence"))
+text(sft$fitIndices[, 1], -sign(sft$fitIndices[, 3]) * sft$fitIndices[, 2], 
+     labels = powers, cex = 0.9, col = "red")
+abline(h = 0.8, col = "blue")
+
+# 绘制平均连通性
+plot(sft$fitIndices[, 1], sft$fitIndices[, 5], 
+     xlab = "Soft Threshold (power)", 
+     ylab = "Mean Connectivity", 
+     type = "n", 
+     main = paste("Mean connectivity"))
+text(sft$fitIndices[, 1], sft$fitIndices[, 5], 
+     labels = powers, cex = 0.9, col = "red")
+
 # 自动选择合适的软阈值
 softPower <- sft$powerEstimate
 
@@ -51,21 +72,7 @@ if (is.na(softPower)) {
   softPower <- 6  # 如果未找到合适的软阈值，使用默认值6
 }
 
-# 可视化软阈值选择
-if (!is.na(softPower)) {
-plot(sft$fitIndices[, 1], -sign(sft$fitIndices[, 3]) * sft$fitIndices[, 2],
-     xlab = "Soft Threshold (power)",
-     ylab = "Scale Free Topology Model Fit, signed R^2",
-     type = "n")
-text(sft$fitIndices[, 1], -sign(sft$fitIndices[, 3]) * sft$fitIndices[, 2],
-     labels = powers, cex = 0.9, col = "red")
-
-# 在最佳软阈值处画一条横线
-  abline(v = softPower, col = "blue", lty = 2)
-}
-
 # 选择合适的软阈值
-softPower <- sft$powerEstimate  # 自动选择的软阈值
 adjacency <- adjacency(datExpr, power = softPower)
 
 # 将邻接矩阵转换为拓扑重叠矩阵 (TOM)，并计算相似度
